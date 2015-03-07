@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->btnZp, SIGNAL(pressed()), this, SLOT(JoggingBtnPressed()));
     connect(ui->btnHome, SIGNAL(pressed()), this, SLOT(JoggingBtnPressed()));
 
+    connect(&grbl, SIGNAL(ToolChangeRequest()), this, SLOT(ToolChangeRequest()));
     connect(ui->leGFileName, SIGNAL(textChanged(QString)), this, SLOT(UpdateUIState()));
 
     UpdateUIState();
@@ -81,6 +82,14 @@ void MainWindow::ResponseLineReceieved(QString line)
 
     idx = line.indexOf(",");
     ui->gbStatus->setTitle("Status: " + line.mid(1, idx - 1));
+    if(line.mid(1, idx - 1)=="Alarm")
+    {
+        ui->btnUnlock->setStyleSheet("background-color: rgb(255, 0, 0); color: rgb(255, 247, 0);");
+    }
+    else
+    {
+        ui->btnUnlock->setStyleSheet("");
+    }
 
     idx = line.indexOf("WPos:");
     if(idx > 0)
@@ -127,6 +136,16 @@ void MainWindow::ResponseLineReceieved(QString line)
     }
 
     grbl.setCapturingResponse(false);
+}
+
+void MainWindow::ToolChangeRequest()
+{
+    ui->btnHold->setChecked(true);
+    ui->btnHold->setEnabled(false);
+    ui->btnToolChangeAccept->setEnabled(true);
+    grbl.SendAsyncCommand("!", false);
+
+
 }
 
 void MainWindow::JoggingBtnPressed()
@@ -239,6 +258,7 @@ void MainWindow::on_btnReset_pressed()
         UpdateUIState();
     }
     grbl.SendReset();
+    ui->btnToolChangeAccept->setEnabled(false);
 }
 
 void MainWindow::on_btnOpenGFile_clicked()
@@ -274,3 +294,11 @@ void MainWindow::on_btnCheckGFile_clicked()
     GFileSendChunk();
 }
 
+
+
+void MainWindow::on_btnToolChangeAccept_clicked()
+{
+    ui->btnToolChangeAccept->setEnabled(false);
+    grbl.SendAsyncCommand("~", false);
+
+}

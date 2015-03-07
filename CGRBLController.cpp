@@ -1,5 +1,5 @@
 #include "CGRBLController.h"
-//#include <QDebug>
+#include <QDebug>
 #include <QStringList>
 #include <QThread>
 
@@ -70,6 +70,10 @@ bool CGRBLController::EnqueueCommand(QString cmd)
     if(!m_port.isOpen() || m_ResetInProgress) return false;
 
     cmd = cmd.trimmed();
+    if(cmd.contains(QRegExp("[t,T][(0-9)]*")))
+    {
+       emit ToolChangeRequest();
+    }
     if(cmd.isEmpty()) return true;
 
     if((cmd.count() + m_BufFill) < GRBL_BUFFER_SIZE)
@@ -104,6 +108,7 @@ void CGRBLController::serialReadyRead()
     while(m_port.canReadLine())
     {
         QString resp = m_port.readLine().simplified();
+        qDebug()<<resp;
 
         if(resp.indexOf("Grbl") == 0)
         {

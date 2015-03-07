@@ -24,6 +24,7 @@ private slots:
     void CommandError(QString response);
     void CommandSent(QString cmd);
     void ResponseLineReceieved(QString line);
+    void ToolChangeRequest();
     void JoggingBtnPressed();
     void on_btnHold_pressed();
     void on_btnReset_pressed();
@@ -63,6 +64,7 @@ private slots:
     void on_lineEdit_returnPressed();
 /* ------------------------------------------------ */
 
+    void on_btnToolChangeAccept_clicked();
 };
 
 #endif // MAINWINDOW_H

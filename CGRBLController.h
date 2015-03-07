@@ -45,6 +45,7 @@ signals:
     void CommandError(QString response);
     void ResponseLineReceieved(QString line);
     void CommandSent(QString cmd);
+    void ToolChangeRequest();
 
 public slots:
 };
