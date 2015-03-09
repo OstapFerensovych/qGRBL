@@ -26,6 +26,7 @@ private slots:
     void ResponseLineReceieved(QString line);
     void ToolChangeRequest();
     void JoggingBtnPressed();
+    void ComPortSelected(QAction *action);
     void on_btnHold_pressed();
     void on_btnReset_pressed();
     void on_btnOpenGFile_clicked();

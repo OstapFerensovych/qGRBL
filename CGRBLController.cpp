@@ -24,6 +24,7 @@ bool CGRBLController::OpenPort(QString port, quint32 baud)
     m_port.setBaudRate((QSerialPort::BaudRate)baud);
     connect(&m_port, SIGNAL(readyRead()), this, SLOT(serialReadyRead()));
     bool ok = m_port.open(QSerialPort::ReadWrite);
+
     if(ok) SendReset();
 
     return ok;
