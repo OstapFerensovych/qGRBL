@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QFileDialog>
+#include <QtSerialPort/QSerialPortInfo>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -13,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_eCurrentState = stIdle;
 
-    grbl.OpenPort("COM4", 115200);
+
 
     _ManualControlCreate();
 
@@ -29,9 +30,22 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->btnZm, SIGNAL(pressed()), this, SLOT(JoggingBtnPressed()));
     connect(ui->btnZp, SIGNAL(pressed()), this, SLOT(JoggingBtnPressed()));
     connect(ui->btnHome, SIGNAL(pressed()), this, SLOT(JoggingBtnPressed()));
+    connect(ui->menuCommunication, SIGNAL(triggered(QAction*)), this, SLOT(ComPortSelected(QAction*)));
 
     connect(&grbl, SIGNAL(ToolChangeRequest()), this, SLOT(ToolChangeRequest()));
     connect(ui->leGFileName, SIGNAL(textChanged(QString)), this, SLOT(UpdateUIState()));
+
+    if(QSerialPortInfo::availablePorts().isEmpty())
+    {
+        ui->menuCommunication->addAction("There is no available devices!")->setDisabled(true);
+    }else{
+        foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
+        {
+        QAction *a = ui->menuCommunication->addAction(info.portName()+" - "+info.description());
+        a->setCheckable(true);
+        a->setToolTip(info.portName());
+        }
+    }
 
     UpdateUIState();
     startTimer(100);
@@ -75,6 +89,7 @@ void MainWindow::CommandSent(QString )
 {
 
 }
+
 
 void MainWindow::ResponseLineReceieved(QString line)
 {
@@ -301,4 +316,9 @@ void MainWindow::on_btnToolChangeAccept_clicked()
     ui->btnToolChangeAccept->setEnabled(false);
     grbl.SendAsyncCommand("~", false);
 
+}
+
+void MainWindow::ComPortSelected(QAction* action)
+{
+    grbl.OpenPort(action->toolTip(), 115200);
 }
