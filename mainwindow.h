@@ -6,6 +6,7 @@
 #include <QFile>
 
 #include "CGRBLController.h"
+#include <grbl_settings.h>
 
 namespace Ui {
 class MainWindow;
@@ -35,10 +36,12 @@ private slots:
     void on_btnStartGFile_clicked();
     void on_btnUnlock_clicked();
     void on_btnCheckGFile_clicked();
+    void opengrblSettings();
 
 
 private:
     Ui::MainWindow *ui;
+    grbl_settings *grblSet;
     QFile gfile;
     CGRBLController grbl;
 
@@ -66,6 +69,10 @@ private slots:
 /* ------------------------------------------------ */
 
     void on_btnToolChangeAccept_clicked();
+
+    void on_btnZeroXY_clicked();
+    void on_btnZeroZ_clicked();
+    void on_actionGRBL_Settings_triggered();
 };
 
 #endif // MAINWINDOW_H

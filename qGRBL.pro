@@ -15,12 +15,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     CGRBLController.cpp \
-    mainwindow_manualcontrol.cpp
+    mainwindow_manualcontrol.cpp \
+    grbl_settings.cpp
 
 HEADERS  += mainwindow.h \
-    CGRBLController.h
+    CGRBLController.h \
+    grbl_settings.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    grbl_settings.ui
 
 RESOURCES += \
     rsrc.qrc

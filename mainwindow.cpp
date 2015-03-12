@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "grbl_settings.h"
+#include "ui_grbl_settings.h"
 #include <QDebug>
 #include <QThread>
 #include <QFileDialog>
@@ -157,10 +159,12 @@ void MainWindow::ToolChangeRequest()
 {
     ui->btnHold->setChecked(true);
     ui->btnHold->setEnabled(false);
+    ui->btnProbe->setEnabled(true);
     ui->btnToolChangeAccept->setEnabled(true);
+    grbl.SendAsyncCommand("G30.1",true);
+    grbl.SendAsyncCommand("G92 Z0",true);
+    grbl.SendAsyncCommand("G92 X0 Y0",true);
     grbl.SendAsyncCommand("!", false);
-
-
 }
 
 void MainWindow::JoggingBtnPressed()
@@ -181,7 +185,7 @@ void MainWindow::JoggingBtnPressed()
     else if(ui->btnYp->isDown()) cmd = "G91\nG1 Y"  + dist + " F" + feed + "\nG90";
     else if(ui->btnZm->isDown()) cmd = "G91\nG1 Z-" + dist + " F" + feed + "\nG90";
     else if(ui->btnZp->isDown()) cmd = "G91\nG1 Z"  + dist + " F" + feed + "\nG90";
-    else if(ui->btnHome->isDown()) cmd = "G0 Z0\nG0 X0 Y0";
+    else if(ui->btnHome->isDown()) cmd = "G90 G0 Z0\nG0 X0 Y0";
 
     grbl.EnqueueCommand(cmd);
 }
@@ -241,6 +245,11 @@ void MainWindow::UpdateUIState()
         ui->btnZp->setEnabled(true);
         ui->btnHome->setEnabled(true);
         ui->btnUnlock->setEnabled(true);
+        ui->btnProbe->setEnabled(true);
+        ui->btnZeroXY->setEnabled(true);
+        ui->btnZeroZ->setEnabled(true);
+        ui->btnSpnON->setEnabled(true);
+        ui->btnSpnOFF->setEnabled(true);
     }
     else if(m_eCurrentState == stSendingGFile || m_eCurrentState == stCheckingGFile)
     {
@@ -252,6 +261,11 @@ void MainWindow::UpdateUIState()
         ui->btnZp->setEnabled(false);
         ui->btnHome->setEnabled(false);
         ui->btnUnlock->setEnabled(false);
+        ui->btnProbe->setEnabled(false);
+        ui->btnZeroXY->setEnabled(false);
+        ui->btnZeroZ->setEnabled(false);
+        ui->btnSpnON->setEnabled(false);
+        ui->btnSpnOFF->setEnabled(false);
     }
 
     this->setDisabled(grbl.isResetInProgress());
@@ -314,11 +328,36 @@ void MainWindow::on_btnCheckGFile_clicked()
 void MainWindow::on_btnToolChangeAccept_clicked()
 {
     ui->btnToolChangeAccept->setEnabled(false);
+    ui->btnProbe->setEnabled(false);
     grbl.SendAsyncCommand("~", false);
+    grbl.SendAsyncCommand("G30",true);
 
 }
 
 void MainWindow::ComPortSelected(QAction* action)
 {
     grbl.OpenPort(action->toolTip(), 115200);
+}
+
+
+
+void MainWindow::on_btnZeroXY_clicked()
+{
+    grbl.SendAsyncCommand("G92 X0 Y0",true);
+}
+
+void MainWindow::on_btnZeroZ_clicked()
+{
+    grbl.SendAsyncCommand("G92 Z0",true);
+}
+
+void MainWindow::opengrblSettings()
+{
+    grblSet = new grbl_settings(this);
+    grblSet->show();
+}
+
+void MainWindow::on_actionGRBL_Settings_triggered()
+{
+    opengrblSettings();
 }
