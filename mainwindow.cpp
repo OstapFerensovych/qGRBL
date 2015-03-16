@@ -2,10 +2,10 @@
 #include "ui_mainwindow.h"
 #include "grbl_settings.h"
 #include "ui_grbl_settings.h"
+
 #include <QDebug>
-#include <QThread>
 #include <QFileDialog>
-#include <QtSerialPort/QSerialPortInfo>
+#include <QSerialPortInfo>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -15,8 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     m_eCurrentState = stIdle;
-
-
 
     _ManualControlCreate();
 
@@ -32,22 +30,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->btnZm, SIGNAL(pressed()), this, SLOT(JoggingBtnPressed()));
     connect(ui->btnZp, SIGNAL(pressed()), this, SLOT(JoggingBtnPressed()));
     connect(ui->btnHome, SIGNAL(pressed()), this, SLOT(JoggingBtnPressed()));
-    connect(ui->menuCommunication, SIGNAL(triggered(QAction*)), this, SLOT(ComPortSelected(QAction*)));
+    connect(ui->menuCommunication, SIGNAL(triggered(QAction*)), this, SLOT(CommPortSelected(QAction*)));
+    connect(ui->menuCommunication, SIGNAL(aboutToShow()), this, SLOT(EnumerateCommPorts()));
 
     connect(&grbl, SIGNAL(ToolChangeRequest()), this, SLOT(ToolChangeRequest()));
     connect(ui->leGFileName, SIGNAL(textChanged(QString)), this, SLOT(UpdateUIState()));
-
-    if(QSerialPortInfo::availablePorts().isEmpty())
-    {
-        ui->menuCommunication->addAction("There is no available devices!")->setDisabled(true);
-    }else{
-        foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
-        {
-        QAction *a = ui->menuCommunication->addAction(info.portName()+" - "+info.description());
-        a->setCheckable(true);
-        a->setToolTip(info.portName());
-        }
-    }
 
     UpdateUIState();
     startTimer(100);
@@ -334,12 +321,31 @@ void MainWindow::on_btnToolChangeAccept_clicked()
 
 }
 
-void MainWindow::ComPortSelected(QAction* action)
+void MainWindow::CommPortSelected(QAction* action)
 {
     grbl.OpenPort(action->toolTip(), 115200);
+    m_CurrentCommPort = action->toolTip();
 }
 
+void MainWindow::EnumerateCommPorts()
+{
+    ui->menuCommunication->clear();
 
+    if(QSerialPortInfo::availablePorts().isEmpty())
+    {
+        ui->menuCommunication->addAction("There is no available devices!")->setDisabled(true);
+    }
+    else
+    {
+        foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
+        {
+            QAction *a = ui->menuCommunication->addAction(info.portName() + (info.description().isEmpty() ? "" : " - " + info.description()));
+            a->setCheckable(true);
+            a->setToolTip(info.portName());
+            if(info.portName() == m_CurrentCommPort) a->setChecked(true);
+        }
+    }
+}
 
 void MainWindow::on_btnZeroXY_clicked()
 {

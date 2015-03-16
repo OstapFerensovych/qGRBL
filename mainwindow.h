@@ -6,7 +6,7 @@
 #include <QFile>
 
 #include "CGRBLController.h"
-#include <grbl_settings.h>
+#include "grbl_settings.h"
 
 namespace Ui {
 class MainWindow;
@@ -27,10 +27,13 @@ private slots:
     void ResponseLineReceieved(QString line);
     void ToolChangeRequest();
     void JoggingBtnPressed();
-    void ComPortSelected(QAction *action);
     void on_btnHold_pressed();
     void on_btnReset_pressed();
     void on_btnOpenGFile_clicked();
+    void on_btnToolChangeAccept_clicked();
+    void on_btnZeroXY_clicked();
+    void on_btnZeroZ_clicked();
+    void on_actionGRBL_Settings_triggered();
 
     void UpdateUIState(void);
     void on_btnStartGFile_clicked();
@@ -57,7 +60,15 @@ private:
     } m_eCurrentState;
 
 
-/* ---------------- Manual Control ---------------- */
+    /* -------------- Comm Port Selection-------------- */
+private:
+    QString m_CurrentCommPort;
+private slots:
+    void CommPortSelected(QAction *action);
+    void EnumerateCommPorts();
+    /* ------------------------------------------------ */
+
+    /* ---------------- Manual Control ---------------- */
 private:
     int m_MCPointer;
     QStringList m_MCHistory;
@@ -66,13 +77,8 @@ private:
     void _ManualControlDelete();
 private slots:
     void on_lineEdit_returnPressed();
-/* ------------------------------------------------ */
+    /* ------------------------------------------------ */
 
-    void on_btnToolChangeAccept_clicked();
-
-    void on_btnZeroXY_clicked();
-    void on_btnZeroZ_clicked();
-    void on_actionGRBL_Settings_triggered();
 };
 
 #endif // MAINWINDOW_H
