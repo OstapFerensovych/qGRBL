@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QSerialPortInfo>
 
+#define SIMULATOR_DEBUG 0
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -38,6 +39,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     UpdateUIState();
     startTimer(100);
+
+#if(SIMULATOR_DEBUG)
+    m_CurrentCommPort = "/dev/ttyFAKE";
+    grbl.OpenPort(m_CurrentCommPort, 115200);
+#endif
+
 }
 
 MainWindow::~MainWindow()
@@ -362,7 +369,7 @@ void MainWindow::on_btnZeroZ_clicked()
 
 void MainWindow::opengrblSettings()
 {
-    grblSet = new SettingsWindow(this);
+    grblSet = new SettingsWindow(&grbl, this);
     grblSet->show();
 }
 

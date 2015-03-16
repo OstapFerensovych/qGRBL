@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>606</width>
-    <height>552</height>
+    <width>534</width>
+    <height>564</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <property name="toolTip">
    <string/>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1">
    <property name="leftMargin">
     <number>6</number>
    </property>
@@ -37,7 +37,7 @@
      <property name="title">
       <string>GRBL Setup</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3" columnminimumwidth="0,50">
+     <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1" columnminimumwidth="0,50">
       <property name="leftMargin">
        <number>4</number>
       </property>
@@ -60,24 +60,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_7">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Step Idle Delay (msec)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_6">
-        <property name="maxLength">
-         <number>8</number>
         </property>
        </widget>
       </item>
@@ -88,13 +74,6 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit_5">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
@@ -102,10 +81,55 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_13">
+        <property name="statusTip">
+         <string>$0,int</string>
+        </property>
+        <property name="decimals">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <double>9999.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_14">
+        <property name="statusTip">
+         <string>$1,int</string>
+        </property>
+        <property name="decimals">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <double>9999.000000000000000</double>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_4">
-        <property name="maxLength">
-         <number>8</number>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_15">
+        <property name="statusTip">
+         <string>$11,float</string>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_16">
+        <property name="statusTip">
+         <string>$12,float</string>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
         </property>
        </widget>
       </item>
@@ -117,7 +141,7 @@
      <property name="title">
       <string>Machine Setup</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout" columnminimumwidth="0,50">
+     <layout class="QGridLayout" name="gridLayout" columnstretch="0,1" columnminimumwidth="0,50">
       <property name="leftMargin">
        <number>4</number>
       </property>
@@ -140,13 +164,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEdit_9">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_10">
         <property name="text">
@@ -154,24 +171,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_10">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_11">
         <property name="text">
          <string>Z Step (step/mm)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_11">
-        <property name="maxLength">
-         <number>8</number>
         </property>
        </widget>
       </item>
@@ -189,13 +192,6 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit_12">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_14">
         <property name="text">
@@ -203,24 +199,10 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QLineEdit" name="lineEdit_13">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_15">
         <property name="text">
          <string>Z Max Rate (mm/min)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QLineEdit" name="lineEdit_14">
-        <property name="maxLength">
-         <number>8</number>
         </property>
        </widget>
       </item>
@@ -238,16 +220,6 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="1">
-       <widget class="QLineEdit" name="lineEdit_16">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="10" column="0">
        <widget class="QLabel" name="label_17">
         <property name="text">
@@ -255,31 +227,10 @@
         </property>
        </widget>
       </item>
-      <item row="10" column="1">
-       <widget class="QLineEdit" name="lineEdit_17">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="17" column="0">
        <widget class="QLabel" name="label_20">
         <property name="text">
          <string>Z Max Travel (mm)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="16" column="1">
-       <widget class="QLineEdit" name="lineEdit_20">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
-      <item row="17" column="1">
-       <widget class="QLineEdit" name="lineEdit_15">
-        <property name="maxLength">
-         <number>8</number>
         </property>
        </widget>
       </item>
@@ -304,13 +255,6 @@
         </property>
        </widget>
       </item>
-      <item row="11" column="1">
-       <widget class="QLineEdit" name="lineEdit_19">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="11" column="0">
        <widget class="QLabel" name="label_21">
         <property name="text">
@@ -318,10 +262,231 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox">
+        <property name="statusTip">
+         <string>$100,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+        <property name="statusTip">
+         <string>$101,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_3">
+        <property name="statusTip">
+         <string>$102,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+        <property name="statusTip">
+         <string>$110,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+        <property name="statusTip">
+         <string>$111,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_6">
+        <property name="statusTip">
+         <string>$112,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_7">
+        <property name="statusTip">
+         <string>$120,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_8">
+        <property name="statusTip">
+         <string>$121,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_9">
+        <property name="statusTip">
+         <string>$122,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
       <item row="13" column="1">
-       <widget class="QLineEdit" name="lineEdit_18">
-        <property name="maxLength">
-         <number>8</number>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_10">
+        <property name="statusTip">
+         <string>$130,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="16" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_11">
+        <property name="statusTip">
+         <string>$131,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_12">
+        <property name="statusTip">
+         <string>$132,float</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+        <property name="singleStep">
+         <double>100.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -354,6 +519,9 @@
       </property>
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="checkBox">
+        <property name="statusTip">
+         <string>$22,bool</string>
+        </property>
         <property name="text">
          <string>Homing Cycle</string>
         </property>
@@ -366,24 +534,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEdit_8">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Homing Feed (mm/min)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEdit_3">
-        <property name="maxLength">
-         <number>8</number>
         </property>
        </widget>
       </item>
@@ -394,13 +548,6 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEdit_2">
-        <property name="maxLength">
-         <number>8</number>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
@@ -408,10 +555,55 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_17">
+        <property name="statusTip">
+         <string>$27,float</string>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_18">
+        <property name="statusTip">
+         <string>$24,float</string>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_19">
+        <property name="statusTip">
+         <string>$25,float</string>
+        </property>
+        <property name="decimals">
+         <number>3</number>
+        </property>
+        <property name="maximum">
+         <double>9999.998999999999796</double>
+        </property>
+       </widget>
+      </item>
       <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit">
-        <property name="maxLength">
-         <number>8</number>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_20">
+        <property name="statusTip">
+         <string>$26,int</string>
+        </property>
+        <property name="decimals">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <double>10000.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -423,7 +615,7 @@
      <property name="title">
       <string>Masks</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_4" columnminimumwidth="0,50">
+     <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0" columnminimumwidth="0,50">
       <property name="leftMargin">
        <number>4</number>
       </property>
@@ -448,6 +640,9 @@
       </item>
       <item row="0" column="1">
        <widget class="QLineEdit" name="lineEdit_21">
+        <property name="statusTip">
+         <string>$10,mask</string>
+        </property>
         <property name="maxLength">
          <number>8</number>
         </property>
@@ -476,6 +671,9 @@
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="lineEdit_22">
+        <property name="statusTip">
+         <string>$2,mask</string>
+        </property>
         <property name="maxLength">
          <number>8</number>
         </property>
@@ -483,6 +681,9 @@
       </item>
       <item row="2" column="1">
        <widget class="QLineEdit" name="lineEdit_23">
+        <property name="statusTip">
+         <string>$3,mask</string>
+        </property>
         <property name="maxLength">
          <number>8</number>
         </property>
@@ -490,6 +691,9 @@
       </item>
       <item row="3" column="1">
        <widget class="QLineEdit" name="lineEdit_24">
+        <property name="statusTip">
+         <string>$23,mask</string>
+        </property>
         <property name="maxLength">
          <number>8</number>
         </property>
@@ -503,7 +707,7 @@
      <property name="title">
       <string>Other</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_5">
+     <layout class="QGridLayout" name="gridLayout_5" columnstretch="0">
       <property name="leftMargin">
        <number>4</number>
       </property>
@@ -521,6 +725,9 @@
       </property>
       <item row="0" column="0">
        <widget class="QCheckBox" name="checkBox_3">
+        <property name="statusTip">
+         <string>$21,bool</string>
+        </property>
         <property name="text">
          <string>Hard Limits</string>
         </property>
@@ -528,6 +735,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="checkBox_6">
+        <property name="statusTip">
+         <string>$20,bool</string>
+        </property>
         <property name="text">
          <string>Soft Limits</string>
         </property>
@@ -535,6 +745,9 @@
       </item>
       <item row="2" column="0">
        <widget class="QCheckBox" name="checkBox_4">
+        <property name="statusTip">
+         <string>$5,bool</string>
+        </property>
         <property name="text">
          <string>Invert Limit Pins</string>
         </property>
@@ -542,6 +755,9 @@
       </item>
       <item row="3" column="0">
        <widget class="QCheckBox" name="checkBox_2">
+        <property name="statusTip">
+         <string>$4,bool</string>
+        </property>
         <property name="text">
          <string>Step Invert Enable</string>
         </property>
@@ -549,6 +765,9 @@
       </item>
       <item row="4" column="0">
        <widget class="QCheckBox" name="checkBox_5">
+        <property name="statusTip">
+         <string>$6,bool</string>
+        </property>
         <property name="text">
          <string>Invert Probe Pin</string>
         </property>
@@ -556,6 +775,9 @@
       </item>
       <item row="5" column="0">
        <widget class="QCheckBox" name="checkBox_7">
+        <property name="statusTip">
+         <string>$13,bool</string>
+        </property>
         <property name="text">
          <string>Report Inches</string>
         </property>

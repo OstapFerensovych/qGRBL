@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSerialPort>
+#include <QStringList>
 
 #define GRBL_BUFFER_SIZE      (120)
 
@@ -24,7 +25,7 @@ public:
     bool EnqueueCommand(QString cmd);
 
     void setCapturingResponse(bool on);
-    QList<QString> getCapturedResponse() { return m_CmdResponse; }
+    QStringList getCapturedResponse() { return m_CmdResponse; }
     quint32 getBufferFill() { return m_BufFill; }
     bool isResetInProgress() { return m_ResetInProgress; }
 
@@ -33,9 +34,11 @@ private:
     QSerialPort::BaudRate m_baud;
     QList<QByteArray>     m_CmdQueue;
     quint32               m_BufFill;
-    QList<QString>        m_CmdResponse;
+    QStringList           m_CmdResponse;
+    QStringList           m_GrblParams;
     bool                  m_ResetInProgress;
     bool                  m_CapturingResponse;
+    bool                  m_RetrievingParams;
 
 private slots:
     void serialReadyRead();
@@ -45,6 +48,7 @@ signals:
     void CommandError(QString response);
     void ResponseLineReceieved(QString line);
     void CommandSent(QString cmd);
+    void ParamsRetreieved(QStringList params);
     void ToolChangeRequest();
 
 public slots:

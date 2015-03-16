@@ -9,6 +9,7 @@ CGRBLController::CGRBLController(QObject *parent) : QObject(parent)
     m_BufFill = 0;
     m_ResetInProgress = false;
     m_CapturingResponse = false;
+    m_RetrievingParams = false;
 }
 
 CGRBLController::~CGRBLController()
@@ -49,7 +50,10 @@ void CGRBLController::RetrieveParams()
 {
     if(!m_port.isOpen() || m_ResetInProgress) return;
 
+    m_RetrievingParams = true;
+    m_GrblParams.clear();
     m_port.write("$$\n");
+    m_port.flush();
 }
 
 bool CGRBLController::SendAsyncCommand(QString cmd, bool appendCR)
@@ -62,6 +66,7 @@ bool CGRBLController::SendAsyncCommand(QString cmd, bool appendCR)
     if(appendCR) ba.append('\n');
 
     m_port.write(ba);
+    m_port.flush();
 
     return true;
 }
@@ -109,7 +114,9 @@ void CGRBLController::serialReadyRead()
     while(m_port.canReadLine())
     {
         QString resp = m_port.readLine().simplified();
-        qDebug()<<resp;
+
+        if(m_RetrievingParams && resp.at(0) == '$') m_GrblParams.append(resp);
+
 
         if(resp.indexOf("Grbl") == 0)
         {
@@ -122,6 +129,11 @@ void CGRBLController::serialReadyRead()
 
         if(resp == "ok")
         {
+            if(m_RetrievingParams)
+            {
+                m_RetrievingParams = false;
+                emit ParamsRetreieved(m_GrblParams);
+            }
             if(m_BufFill)
             {
                 m_BufFill -= m_CmdQueue.first().count();
