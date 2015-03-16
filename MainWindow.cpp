@@ -1,7 +1,7 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "grbl_settings.h"
-#include "ui_grbl_settings.h"
+#include "MainWindow.h"
+#include "ui_MainWindow.h"
+#include "SettingsWindow.h"
+#include "ui_SettingsWindow.h"
 
 #include <QDebug>
 #include <QFileDialog>
@@ -359,7 +359,7 @@ void MainWindow::on_btnZeroZ_clicked()
 
 void MainWindow::opengrblSettings()
 {
-    grblSet = new grbl_settings(this);
+    grblSet = new SettingsWindow(this);
     grblSet->show();
 }
 

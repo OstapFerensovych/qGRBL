@@ -6,7 +6,7 @@
 #include <QFile>
 
 #include "CGRBLController.h"
-#include "grbl_settings.h"
+#include "SettingsWindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -44,7 +44,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    grbl_settings *grblSet;
+    SettingsWindow *grblSet;
     QFile gfile;
     CGRBLController grbl;
 

@@ -4,22 +4,22 @@
 #include <QDialog>
 
 namespace Ui {
-class grbl_settings;
+class SettingsWindow;
 }
 
-class grbl_settings : public QDialog
+class SettingsWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit grbl_settings(QWidget *parent = 0);
-    ~grbl_settings();
+    explicit SettingsWindow(QWidget *parent = 0);
+    ~SettingsWindow();
 
 private slots:
     void on_buttonBox_accepted();
 
 private:
-    Ui::grbl_settings *ui;
+    Ui::SettingsWindow *ui;
 };
 
 #endif // GRBL_SETTINGS_H

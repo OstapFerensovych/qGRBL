@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>grbl_settings</class>
- <widget class="QDialog" name="grbl_settings">
+ <class>SettingsWindow</class>
+ <widget class="QDialog" name="SettingsWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>606</width>
+    <height>552</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>GRBL Settings</string>
   </property>
@@ -573,7 +581,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>grbl_settings</receiver>
+   <receiver>SettingsWindow</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -589,7 +597,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>grbl_settings</receiver>
+   <receiver>SettingsWindow</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
