@@ -12,8 +12,3 @@ SettingsWindow::~SettingsWindow()
 {
     delete ui;
 }
-
-void SettingsWindow::on_buttonBox_accepted()
-{
-
-}

@@ -51,21 +51,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::QueuedCommandDone()
 {
-    if(m_eCurrentState == stSendingGFile)
+    switch(m_eCurrentState)
     {
+    case stCheckingGFile: /* Just falling through to next state */
+    case stSendingGFile:
         if(!GFileSendChunk())
         {
             m_eCurrentState = stIdle;
             UpdateUIState();
         }
-    }
-    else if(m_eCurrentState == stCheckingGFile)
-    {
-        if(!GFileSendChunk())
-        {
-            m_eCurrentState = stIdle;
-            UpdateUIState();
-        }
+        break;
+
+    default:
+        break;
     }
 }
 
@@ -99,15 +97,15 @@ void MainWindow::ResponseLineReceieved(QString line)
     if(idx > 0)
     {
         idx += 5;
-        nextidx = line.indexOf(",", idx);
+        nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblWPX->setText(line.mid(idx, nextidx - idx));
 
         idx = nextidx+1;
-        nextidx = line.indexOf(",", idx);
+        nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblWPY->setText(line.mid(idx, nextidx - idx));
 
         idx = nextidx+1;
-        nextidx = line.indexOf(",", idx);
+        nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblWPZ->setText(line.mid(idx, nextidx - idx));
     }
     else
@@ -121,15 +119,15 @@ void MainWindow::ResponseLineReceieved(QString line)
     if(idx > 0)
     {
         idx += 5;
-        nextidx = line.indexOf(",", idx);
+        nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblMPX->setText(line.mid(idx, nextidx - idx));
 
         idx = nextidx+1;
-        nextidx = line.indexOf(",", idx);
+        nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblMPY->setText(line.mid(idx, nextidx - idx));
 
         idx = nextidx+1;
-        nextidx = line.indexOf(",", idx);
+        nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblMPZ->setText(line.mid(idx, nextidx - idx));
     }
     else
@@ -180,6 +178,7 @@ void MainWindow::JoggingBtnPressed()
 void MainWindow::timerEvent(QTimerEvent *)
 {
     ui->progressBar->setValue(grbl.getBufferFill());
+
     if(gfile.isOpen())
     {
         ui->progressBar_2->setMaximum(gfile.size());
@@ -191,9 +190,13 @@ void MainWindow::timerEvent(QTimerEvent *)
         ui->progressBar_2->setValue(0);
     }
 
-    grbl.setCapturingResponse(true);
-    grbl.SendAsyncCommand("?", false);
-    this->setDisabled(grbl.isResetInProgress());
+    bool reset = grbl.isResetInProgress();
+    this->setDisabled(reset);
+    if(!reset)
+    {
+        grbl.setCapturingResponse(true);
+        grbl.SendAsyncCommand("?", false);
+    }
 }
 
 bool MainWindow::GFileSendChunk()

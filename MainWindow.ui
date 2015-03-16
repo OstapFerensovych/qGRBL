@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>844</width>
-    <height>443</height>
+    <width>884</width>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -927,23 +927,22 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>844</width>
-     <height>18</height>
+     <width>884</width>
+     <height>20</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuCommunication">
-    <property name="title">
-     <string>Communication</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
      <string>Settings</string>
     </property>
+    <widget class="QMenu" name="menuCommunication">
+     <property name="title">
+      <string>Communication</string>
+     </property>
+    </widget>
     <addaction name="actionGRBL_Settings"/>
-    <addaction name="separator"/>
+    <addaction name="menuCommunication"/>
    </widget>
-   <addaction name="menuCommunication"/>
    <addaction name="menuSettings"/>
   </widget>
   <action name="actionGRBL_Settings">

@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = grbl_comm
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -Wall -Wextra -Wpedantic -Wno-unreachable-code -Wno-long-long -Wno-four-char-constants -Werror
 
 SOURCES += main.cpp\
         MainWindow.cpp \

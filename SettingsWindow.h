@@ -15,9 +15,6 @@ public:
     explicit SettingsWindow(QWidget *parent = 0);
     ~SettingsWindow();
 
-private slots:
-    void on_buttonBox_accepted();
-
 private:
     Ui::SettingsWindow *ui;
 };
