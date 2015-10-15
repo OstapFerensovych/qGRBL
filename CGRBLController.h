@@ -30,6 +30,7 @@ public:
     bool isResetInProgress() { return m_ResetInProgress; }
     void setFeedRateMultiplier(double mult);
     double getLastFeedRate();
+    double getActFeedRate();
 
 private:
     QSerialPort           m_port;

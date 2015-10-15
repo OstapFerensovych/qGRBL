@@ -131,17 +131,14 @@ void MainWindow::ResponseLineReceieved(QString line)
         idx += 5;
         nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblMPX->setText(line.mid(idx, nextidx - idx));
-        m_Xpos = ui->lblMPX->text().toDouble();
 
         idx = nextidx+1;
         nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblMPY->setText(line.mid(idx, nextidx - idx));
-        m_Ypos = ui->lblMPY->text().toDouble();
 
         idx = nextidx+1;
         nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblMPZ->setText(line.mid(idx, nextidx - idx));
-        m_Zpos = ui->lblMPZ->text().toDouble();
     }
     else
     {
@@ -212,7 +209,8 @@ void MainWindow::timerEvent(QTimerEvent *)
         grbl.SendAsyncCommand("?", false);
     }
 
-    ui->lblLastFeedRate->setText(QString::number(grbl.getLastFeedRate(), 'f', 3));
+    ui->lblLastFeedRate->setText(QString::number(grbl.getLastFeedRate(), 'f', 1));
+    ui->lblActFeedRate->setText(QString::number(grbl.getActFeedRate(), 'f', 1));
 }
 
 bool MainWindow::GFileSendChunk()
@@ -378,13 +376,13 @@ void MainWindow::EnumerateCommPorts()
 void MainWindow::on_btnZeroXY_clicked()
 {
     int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
-    grbl.SendAsyncCommand("G10 L2 P" + QString::number(currSyst) + " X" + QString::number(m_Xpos) + " Y" + QString::number(m_Ypos));
+    grbl.SendAsyncCommand("G10 L20 P" + QString::number(currSyst) + " X0 Y0");
 }
 
 void MainWindow::on_btnZeroZ_clicked()
 {
     int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
-    grbl.SendAsyncCommand("G10 L2 P" + QString::number(currSyst) + " Z" + QString::number(m_Zpos));
+    grbl.SendAsyncCommand("G10 L20 P" + QString::number(currSyst) + " Z0");
 }
 
 void MainWindow::opengrblSettings()
@@ -405,7 +403,14 @@ void MainWindow::on_setSpnRpm_clicked()
 
 void MainWindow::on_btnSpnON_clicked()
 {
-    grbl.SendAsyncCommand("M3");
+    if(ui->Spn_CW->isChecked())
+    {
+        grbl.SendAsyncCommand("M3");
+        qDebug() << "M3";
+    }else{
+        grbl.SendAsyncCommand("M4");
+        qDebug() << "M4";
+    }
 }
 
 void MainWindow::on_btnSpnOFF_clicked()
@@ -426,16 +431,58 @@ void MainWindow::on_btnProbe_clicked()
 
 void MainWindow::SetZProbe()
 {
-    grbl.SendAsyncCommand("G92 Z" + ui->lineZProbe->text());
-}
-
-void MainWindow::on_dsbFeedOverride_valueChanged(double arg1)
-{
-    grbl.setFeedRateMultiplier(arg1);
+    int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
+    grbl.SendAsyncCommand("G10 L2 P"+ QString::number(currSyst) +" Z" + ui->lineZProbe->text());
 }
 
 void MainWindow::on_coordSyst_currentIndexChanged(int index)
 {
     int currSyst = index + 54;
     grbl.SendAsyncCommand("G" + QString::number(currSyst));
+}
+
+void MainWindow::on_sld_feedOverride_sliderReleased()
+{
+    float value;
+    value = ui->sld_feedOverride->value() / 10.0;
+    grbl.setFeedRateMultiplier(value);
+}
+
+void MainWindow::on_sld_feedOverride_valueChanged(int value)
+{
+    int percent = value * 10;
+    ui->feedPercent->setText(QString::number(percent)+"%");
+}
+
+void MainWindow::on_gotoX0_clicked()
+{
+    grbl.SendAsyncCommand("G0 X0");
+}
+
+void MainWindow::on_gotoY0_clicked()
+{
+    grbl.SendAsyncCommand("G0 Y0");
+}
+
+void MainWindow::on_gotoZ0_clicked()
+{
+    grbl.SendAsyncCommand("G0 Z0");
+}
+
+void MainWindow::on_setXOffset_clicked()
+{
+    int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
+    grbl.SendAsyncCommand("G10 L20 P" + QString::number(currSyst) + " X" + ui->line_XOffs->text());
+}
+
+void MainWindow::on_setYOffset_clicked()
+{
+    int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
+    grbl.SendAsyncCommand("G10 L20 P" + QString::number(currSyst) + " Y" + ui->line_YOffs->text());
+}
+
+void MainWindow::on_setZOffset_clicked()
+{
+    int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
+    grbl.SendAsyncCommand("G10 L20 P" + QString::number(currSyst) + " Z" + ui->line_ZOffs->text());
 }

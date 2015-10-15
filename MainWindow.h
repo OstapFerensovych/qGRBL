@@ -50,9 +50,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    double m_Xpos;
-    double m_Ypos;
-    double m_Zpos;
     SettingsWindow *grblSet;
     QFile gfile;
     CGRBLController grbl;
@@ -88,8 +85,15 @@ private slots:
     void on_lineEdit_returnPressed();
     /* ------------------------------------------------ */
     void on_btnProbe_clicked();
-    void on_dsbFeedOverride_valueChanged(double arg1);
     void on_coordSyst_currentIndexChanged(int index);
+    void on_sld_feedOverride_sliderReleased();
+    void on_sld_feedOverride_valueChanged(int value);
+    void on_gotoX0_clicked();
+    void on_gotoY0_clicked();
+    void on_gotoZ0_clicked();
+    void on_setXOffset_clicked();
+    void on_setYOffset_clicked();
+    void on_setZOffset_clicked();
 };
 
 #endif // MAINWINDOW_H

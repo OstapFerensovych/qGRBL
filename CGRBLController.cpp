@@ -140,6 +140,11 @@ double CGRBLController::getLastFeedRate()
     return m_LastFeedRate;
 }
 
+double CGRBLController::getActFeedRate()
+{
+    return m_LastFeedRate * m_FeedRateMultiplier;
+}
+
 QString CGRBLController::UpdateFeedRateMultiplier(QString cmd, double factor)
 {
     QRegExp re("F[+-]?\\d*\\.?\\d+");
