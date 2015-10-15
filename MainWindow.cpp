@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->menuCommunication, SIGNAL(aboutToShow()), this, SLOT(EnumerateCommPorts()));
 
     connect(&grbl, SIGNAL(ToolChangeRequest()), this, SLOT(ToolChangeRequest()));
+    connect(&grbl, SIGNAL(SetZProbe()), this, SLOT(SetZProbe()));
     connect(ui->leGFileName, SIGNAL(textChanged(QString)), this, SLOT(UpdateUIState()));
 
     UpdateUIState();
@@ -79,9 +80,10 @@ void MainWindow::CommandError(QString response)
     qDebug() << response;
 }
 
-void MainWindow::CommandSent(QString )
+void MainWindow::CommandSent(QString cmd)
 {
-
+    ui->listWidget->addItem(cmd);
+    while(ui->listWidget->count() > 100) ui->listWidget->takeItem(0);
 }
 
 
@@ -128,14 +130,17 @@ void MainWindow::ResponseLineReceieved(QString line)
         idx += 5;
         nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblMPX->setText(line.mid(idx, nextidx - idx));
+        m_Xpos = ui->lblMPX->text().toDouble();
 
         idx = nextidx+1;
         nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblMPY->setText(line.mid(idx, nextidx - idx));
+        m_Ypos = ui->lblMPY->text().toDouble();
 
         idx = nextidx+1;
         nextidx = line.indexOf(QRegularExpression("[,>]"), idx);
         ui->lblMPZ->setText(line.mid(idx, nextidx - idx));
+        m_Zpos = ui->lblMPZ->text().toDouble();
     }
     else
     {
@@ -143,20 +148,20 @@ void MainWindow::ResponseLineReceieved(QString line)
         ui->lblMPY->setText("------");
         ui->lblMPZ->setText("------");
     }
-
     grbl.setCapturingResponse(false);
 }
 
 void MainWindow::ToolChangeRequest()
 {
+    ui->labelToolNumber->setText("TOOL");
     ui->btnHold->setChecked(true);
     ui->btnHold->setEnabled(false);
     ui->btnProbe->setEnabled(true);
     ui->btnToolChangeAccept->setEnabled(true);
-    grbl.SendAsyncCommand("G30.1",true);
-    grbl.SendAsyncCommand("G92 Z0",true);
-    grbl.SendAsyncCommand("G92 X0 Y0",true);
-    grbl.SendAsyncCommand("!", false);
+    grbl.EnqueueCommand("M0");
+    //grbl.EnqueueCommand("G30.1");
+    //grbl.EnqueueCommand("G91 Z0");
+    //grbl.EnqueueCommand("G91 X0 Y0");
 }
 
 void MainWindow::JoggingBtnPressed()
@@ -185,6 +190,7 @@ void MainWindow::JoggingBtnPressed()
 void MainWindow::timerEvent(QTimerEvent *)
 {
     ui->progressBar->setValue(grbl.getBufferFill());
+    ui->listWidget->scrollToBottom();
 
     if(gfile.isOpen())
     {
@@ -265,6 +271,7 @@ void MainWindow::UpdateUIState()
         ui->btnSpnOFF->setEnabled(false);
     }
 
+
     this->setDisabled(grbl.isResetInProgress());
 }
 
@@ -304,6 +311,17 @@ void MainWindow::on_btnStartGFile_clicked()
     GFileSendChunk();
 }
 
+void MainWindow::on_btnStopGFile_clicked()
+{
+    if(m_eCurrentState == stSendingGFile || m_eCurrentState == stCheckingGFile)
+    {
+        gfile.close();
+        m_eCurrentState = stIdle;
+        UpdateUIState();
+    }
+    ui->btnToolChangeAccept->setEnabled(false);
+}
+
 void MainWindow::on_btnUnlock_clicked()
 {
     grbl.SendAsyncCommand("$X");
@@ -327,7 +345,7 @@ void MainWindow::on_btnToolChangeAccept_clicked()
     ui->btnToolChangeAccept->setEnabled(false);
     ui->btnProbe->setEnabled(false);
     grbl.SendAsyncCommand("~", false);
-    grbl.SendAsyncCommand("G30",true);
+    //grbl.SendAsyncCommand("G30",true);
 
 }
 
@@ -359,12 +377,14 @@ void MainWindow::EnumerateCommPorts()
 
 void MainWindow::on_btnZeroXY_clicked()
 {
-    grbl.SendAsyncCommand("G92 X0 Y0",true);
+    int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
+    grbl.SendAsyncCommand("G10 L2 P" + QString::number(currSyst) + " X" + QString::number(m_Xpos) + " Y" + QString::number(m_Ypos),true);
 }
 
 void MainWindow::on_btnZeroZ_clicked()
 {
-    grbl.SendAsyncCommand("G92 Z0",true);
+    int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
+    grbl.SendAsyncCommand("G10 L2 P" + QString::number(currSyst) + " Z" + QString::number(m_Zpos),true);
 }
 
 void MainWindow::opengrblSettings()
@@ -376,4 +396,42 @@ void MainWindow::opengrblSettings()
 void MainWindow::on_actionGRBL_Settings_triggered()
 {
     opengrblSettings();
+}
+
+void MainWindow::on_setSpnRpm_clicked()
+{
+    grbl.SendAsyncCommand("S" + ui->rpmBox->text(),true);
+}
+
+void MainWindow::on_btnSpnON_clicked()
+{
+    grbl.SendAsyncCommand("M3",true);
+}
+
+void MainWindow::on_btnSpnOFF_clicked()
+{
+    grbl.SendAsyncCommand("M5",true);
+}
+
+void MainWindow::on_rpmBox_returnPressed()
+{
+    on_setSpnRpm_clicked();
+}
+
+void MainWindow::on_btnProbe_clicked()
+{
+    grbl.SendAsyncCommand("G91 G38.2 Z-10 F10",true);
+    grbl.SendAsyncCommand("G90");
+
+}
+
+void MainWindow::SetZProbe()
+{
+    grbl.SendAsyncCommand("G92 Z" + ui->lineZProbe->text(),true);
+}
+
+void MainWindow::on_coordSyst_currentIndexChanged()
+{
+    int currSyst = ui->coordSyst->currentIndex() + 54;
+    grbl.SendAsyncCommand("G" + QString::number(currSyst));
 }

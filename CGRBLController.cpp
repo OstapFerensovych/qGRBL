@@ -80,6 +80,9 @@ bool CGRBLController::EnqueueCommand(QString cmd)
     {
        emit ToolChangeRequest();
     }
+
+
+
     if(cmd.isEmpty()) return true;
 
     if((cmd.count() + m_BufFill) < GRBL_BUFFER_SIZE)
@@ -114,6 +117,8 @@ void CGRBLController::serialReadyRead()
     while(m_port.canReadLine())
     {
         QString resp = m_port.readLine().simplified();
+
+
 
         if(m_RetrievingParams && resp.at(0) == '$') m_GrblParams.append(resp);
 
@@ -153,6 +158,12 @@ void CGRBLController::serialReadyRead()
             emit CommandError(resp);
             return;
         }
+
+        else if(resp.contains("[PRB:"))
+        {
+           emit SetZProbe();
+        }
+
         else if(m_CapturingResponse)
         {
             m_CmdResponse.append(resp);

@@ -50,6 +50,7 @@ signals:
     void CommandSent(QString cmd);
     void ParamsRetreieved(QStringList params);
     void ToolChangeRequest();
+    void SetZProbe();
 
 public slots:
 };

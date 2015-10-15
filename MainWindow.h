@@ -26,6 +26,7 @@ private slots:
     void CommandSent(QString cmd);
     void ResponseLineReceieved(QString line);
     void ToolChangeRequest();
+    void SetZProbe();
     void JoggingBtnPressed();
     void on_btnHold_pressed();
     void on_btnReset_pressed();
@@ -37,13 +38,21 @@ private slots:
 
     void UpdateUIState(void);
     void on_btnStartGFile_clicked();
+    void on_btnStopGFile_clicked();
     void on_btnUnlock_clicked();
     void on_btnCheckGFile_clicked();
     void opengrblSettings();
+    void on_setSpnRpm_clicked();
+    void on_btnSpnON_clicked();
+    void on_btnSpnOFF_clicked();
+    void on_rpmBox_returnPressed();
 
 
 private:
     Ui::MainWindow *ui;
+    double m_Xpos;
+    double m_Ypos;
+    double m_Zpos;
     SettingsWindow *grblSet;
     QFile gfile;
     CGRBLController grbl;
@@ -57,7 +66,7 @@ private:
         stIdle,
         stCheckingGFile,
         stSendingGFile
-    } m_eCurrentState;
+    }   m_eCurrentState;
 
 
     /* -------------- Comm Port Selection-------------- */
@@ -78,7 +87,8 @@ private:
 private slots:
     void on_lineEdit_returnPressed();
     /* ------------------------------------------------ */
-
+    void on_btnProbe_clicked();
+    void on_coordSyst_currentIndexChanged();
 };
 
 #endif // MAINWINDOW_H
