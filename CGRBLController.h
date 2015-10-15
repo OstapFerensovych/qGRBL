@@ -40,6 +40,8 @@ private:
     bool                  m_ResetInProgress;
     bool                  m_CapturingResponse;
     bool                  m_RetrievingParams;
+    bool                  m_NeedFeedRateUpdate;
+    double                m_LastFeedRate;
     double                m_FeedRateMultiplier;
 
     QString UpdateFeedRateMultiplier(QString cmd, double factor);

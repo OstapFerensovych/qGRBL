@@ -10,6 +10,8 @@ CGRBLController::CGRBLController(QObject *parent) : QObject(parent)
     m_ResetInProgress = false;
     m_CapturingResponse = false;
     m_RetrievingParams = false;
+    m_NeedFeedRateUpdate = false;
+    m_LastFeedRate = 0;
     m_FeedRateMultiplier = 1.0;
 }
 
@@ -44,6 +46,7 @@ void CGRBLController::SendReset()
     m_port.flush();
     m_CmdQueue.clear();
     m_BufFill = 0;
+    m_LastFeedRate = 0;
     m_ResetInProgress = true;
 }
 
@@ -78,15 +81,14 @@ bool CGRBLController::EnqueueCommand(QString cmd)
 {
     if(!m_port.isOpen() || m_ResetInProgress) return false;
 
-    cmd = UpdateFeedRateMultiplier(cmd, m_FeedRateMultiplier);
+    if(m_NeedFeedRateUpdate && (m_LastFeedRate > 0)) cmd = "F" + QString::number(m_LastFeedRate * m_FeedRateMultiplier, 'f', 3);
+    else cmd = UpdateFeedRateMultiplier(cmd, m_FeedRateMultiplier);
 
     cmd = cmd.trimmed();
     if(cmd.contains(QRegExp("[t,T][(0-9)]*")))
     {
-       emit ToolChangeRequest();
+        emit ToolChangeRequest();
     }
-
-
 
     if(cmd.isEmpty()) return true;
 
@@ -100,11 +102,18 @@ bool CGRBLController::EnqueueCommand(QString cmd)
             ba.append(sl.at(i) + "\n");
             m_CmdQueue.append(ba);
             m_BufFill += ba.count();
+
             if(m_CmdQueue.count() == 1)
             {
                 m_port.write(m_CmdQueue.first());
                 emit CommandSent(m_CmdQueue.first().trimmed());
             }
+        }
+
+        if(m_NeedFeedRateUpdate)
+        {
+            m_NeedFeedRateUpdate = false;
+            return false;
         }
 
         return true;
@@ -123,6 +132,7 @@ void CGRBLController::setFeedRateMultiplier(double mult)
     else if(mult > 10.0) mult = 10.0;
 
     m_FeedRateMultiplier = mult;
+    m_NeedFeedRateUpdate = true;
 }
 
 QString CGRBLController::UpdateFeedRateMultiplier(QString cmd, double factor)
@@ -130,17 +140,18 @@ QString CGRBLController::UpdateFeedRateMultiplier(QString cmd, double factor)
     QRegExp re("F[+-]?\\d*\\.?\\d+");
     bool ok;
 
-    qDebug() << ">" << cmd;
+    qDebug() << ">" << cmd.trimmed();
     if(re.indexIn(cmd) >= 0)
     {
         foreach(QString match, re.capturedTexts())
         {
             double feedVal = match.remove(0, 1).toDouble(&ok);
             if(!ok) continue;
-            cmd.replace(match, QString::number(feedVal * factor));
+            m_LastFeedRate = feedVal;
+            cmd.replace(match, QString::number(feedVal * factor, 'f', 3));
         }
     }
-    qDebug() << "<" << cmd;
+    qDebug() << "<" << cmd.trimmed();
     qDebug() << "-----------------------------------";
 
     return cmd;
@@ -152,10 +163,7 @@ void CGRBLController::serialReadyRead()
     {
         QString resp = m_port.readLine().simplified();
 
-
-
         if(m_RetrievingParams && resp.at(0) == '$') m_GrblParams.append(resp);
-
 
         if(resp.indexOf("Grbl") == 0)
         {
@@ -195,7 +203,7 @@ void CGRBLController::serialReadyRead()
 
         else if(resp.contains("[PRB:"))
         {
-           emit SetZProbe();
+            emit SetZProbe();
         }
 
         else if(m_CapturingResponse)

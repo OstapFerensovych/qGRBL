@@ -82,6 +82,7 @@ void MainWindow::CommandError(QString response)
 
 void MainWindow::CommandSent(QString cmd)
 {
+    ui->listWidget->clearSelection();
     ui->listWidget->addItem(cmd);
     while(ui->listWidget->count() > 100) ui->listWidget->takeItem(0);
 }
@@ -338,15 +339,12 @@ void MainWindow::on_btnCheckGFile_clicked()
     GFileSendChunk();
 }
 
-
-
 void MainWindow::on_btnToolChangeAccept_clicked()
 {
     ui->btnToolChangeAccept->setEnabled(false);
     ui->btnProbe->setEnabled(false);
     grbl.SendAsyncCommand("~", false);
     //grbl.SendAsyncCommand("G30",true);
-
 }
 
 void MainWindow::CommPortSelected(QAction* action)
@@ -378,13 +376,13 @@ void MainWindow::EnumerateCommPorts()
 void MainWindow::on_btnZeroXY_clicked()
 {
     int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
-    grbl.SendAsyncCommand("G10 L2 P" + QString::number(currSyst) + " X" + QString::number(m_Xpos) + " Y" + QString::number(m_Ypos),true);
+    grbl.SendAsyncCommand("G10 L2 P" + QString::number(currSyst) + " X" + QString::number(m_Xpos) + " Y" + QString::number(m_Ypos));
 }
 
 void MainWindow::on_btnZeroZ_clicked()
 {
     int currSyst = QString::number(ui->coordSyst->currentIndex()).toInt() + 1;
-    grbl.SendAsyncCommand("G10 L2 P" + QString::number(currSyst) + " Z" + QString::number(m_Zpos),true);
+    grbl.SendAsyncCommand("G10 L2 P" + QString::number(currSyst) + " Z" + QString::number(m_Zpos));
 }
 
 void MainWindow::opengrblSettings()
@@ -400,17 +398,17 @@ void MainWindow::on_actionGRBL_Settings_triggered()
 
 void MainWindow::on_setSpnRpm_clicked()
 {
-    grbl.SendAsyncCommand("S" + ui->rpmBox->text(),true);
+    grbl.SendAsyncCommand("S" + ui->rpmBox->text());
 }
 
 void MainWindow::on_btnSpnON_clicked()
 {
-    grbl.SendAsyncCommand("M3",true);
+    grbl.SendAsyncCommand("M3");
 }
 
 void MainWindow::on_btnSpnOFF_clicked()
 {
-    grbl.SendAsyncCommand("M5",true);
+    grbl.SendAsyncCommand("M5");
 }
 
 void MainWindow::on_rpmBox_returnPressed()
@@ -420,23 +418,22 @@ void MainWindow::on_rpmBox_returnPressed()
 
 void MainWindow::on_btnProbe_clicked()
 {
-    grbl.SendAsyncCommand("G91 G38.2 Z-10 F10",true);
+    grbl.SendAsyncCommand("G91 G38.2 Z-10 F10");
     grbl.SendAsyncCommand("G90");
-
 }
 
 void MainWindow::SetZProbe()
 {
-    grbl.SendAsyncCommand("G92 Z" + ui->lineZProbe->text(),true);
-}
-
-void MainWindow::on_coordSyst_currentIndexChanged()
-{
-    int currSyst = ui->coordSyst->currentIndex() + 54;
-    grbl.SendAsyncCommand("G" + QString::number(currSyst));
+    grbl.SendAsyncCommand("G92 Z" + ui->lineZProbe->text());
 }
 
 void MainWindow::on_dsbFeedOverride_valueChanged(double arg1)
 {
     grbl.setFeedRateMultiplier(arg1);
+}
+
+void MainWindow::on_coordSyst_currentIndexChanged(int index)
+{
+    int currSyst = index + 54;
+    grbl.SendAsyncCommand("G" + QString::number(currSyst));
 }

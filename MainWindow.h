@@ -88,8 +88,8 @@ private slots:
     void on_lineEdit_returnPressed();
     /* ------------------------------------------------ */
     void on_btnProbe_clicked();
-    void on_coordSyst_currentIndexChanged();
     void on_dsbFeedOverride_valueChanged(double arg1);
+    void on_coordSyst_currentIndexChanged(int index);
 };
 
 #endif // MAINWINDOW_H
