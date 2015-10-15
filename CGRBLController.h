@@ -29,6 +29,7 @@ public:
     quint32 getBufferFill() { return m_BufFill; }
     bool isResetInProgress() { return m_ResetInProgress; }
     void setFeedRateMultiplier(double mult);
+    double getLastFeedRate();
 
 private:
     QSerialPort           m_port;

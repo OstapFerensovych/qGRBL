@@ -211,6 +211,8 @@ void MainWindow::timerEvent(QTimerEvent *)
         grbl.setCapturingResponse(true);
         grbl.SendAsyncCommand("?", false);
     }
+
+    ui->lblLastFeedRate->setText(QString::number(grbl.getLastFeedRate(), 'f', 3));
 }
 
 bool MainWindow::GFileSendChunk()
