@@ -435,3 +435,8 @@ void MainWindow::on_coordSyst_currentIndexChanged()
     int currSyst = ui->coordSyst->currentIndex() + 54;
     grbl.SendAsyncCommand("G" + QString::number(currSyst));
 }
+
+void MainWindow::on_dsbFeedOverride_valueChanged(double arg1)
+{
+    grbl.setFeedRateMultiplier(arg1);
+}

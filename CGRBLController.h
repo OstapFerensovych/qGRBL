@@ -28,6 +28,7 @@ public:
     QStringList getCapturedResponse() { return m_CmdResponse; }
     quint32 getBufferFill() { return m_BufFill; }
     bool isResetInProgress() { return m_ResetInProgress; }
+    void setFeedRateMultiplier(double mult);
 
 private:
     QSerialPort           m_port;
@@ -39,6 +40,9 @@ private:
     bool                  m_ResetInProgress;
     bool                  m_CapturingResponse;
     bool                  m_RetrievingParams;
+    double                m_FeedRateMultiplier;
+
+    QString UpdateFeedRateMultiplier(QString cmd, double factor);
 
 private slots:
     void serialReadyRead();

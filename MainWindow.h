@@ -89,6 +89,7 @@ private slots:
     /* ------------------------------------------------ */
     void on_btnProbe_clicked();
     void on_coordSyst_currentIndexChanged();
+    void on_dsbFeedOverride_valueChanged(double arg1);
 };
 
 #endif // MAINWINDOW_H

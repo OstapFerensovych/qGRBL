@@ -10,6 +10,7 @@ CGRBLController::CGRBLController(QObject *parent) : QObject(parent)
     m_ResetInProgress = false;
     m_CapturingResponse = false;
     m_RetrievingParams = false;
+    m_FeedRateMultiplier = 1.0;
 }
 
 CGRBLController::~CGRBLController()
@@ -60,6 +61,8 @@ bool CGRBLController::SendAsyncCommand(QString cmd, bool appendCR)
 {
     if(!m_port.isOpen() || m_ResetInProgress) return false;
 
+    cmd = UpdateFeedRateMultiplier(cmd, m_FeedRateMultiplier);
+
     QByteArray ba;
     ba.clear();
     ba.append(cmd.trimmed());
@@ -74,6 +77,8 @@ bool CGRBLController::SendAsyncCommand(QString cmd, bool appendCR)
 bool CGRBLController::EnqueueCommand(QString cmd)
 {
     if(!m_port.isOpen() || m_ResetInProgress) return false;
+
+    cmd = UpdateFeedRateMultiplier(cmd, m_FeedRateMultiplier);
 
     cmd = cmd.trimmed();
     if(cmd.contains(QRegExp("[t,T][(0-9)]*")))
@@ -110,6 +115,35 @@ void CGRBLController::setCapturingResponse(bool on)
 {
     if(on) m_CmdResponse.clear();
     m_CapturingResponse = on;
+}
+
+void CGRBLController::setFeedRateMultiplier(double mult)
+{
+    if(mult < 0.1) mult = 0.1;
+    else if(mult > 10.0) mult = 10.0;
+
+    m_FeedRateMultiplier = mult;
+}
+
+QString CGRBLController::UpdateFeedRateMultiplier(QString cmd, double factor)
+{
+    QRegExp re("F[+-]?\\d*\\.?\\d+");
+    bool ok;
+
+    qDebug() << ">" << cmd;
+    if(re.indexIn(cmd) >= 0)
+    {
+        foreach(QString match, re.capturedTexts())
+        {
+            double feedVal = match.remove(0, 1).toDouble(&ok);
+            if(!ok) continue;
+            cmd.replace(match, QString::number(feedVal * factor));
+        }
+    }
+    qDebug() << "<" << cmd;
+    qDebug() << "-----------------------------------";
+
+    return cmd;
 }
 
 void CGRBLController::serialReadyRead()
