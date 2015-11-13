@@ -150,7 +150,7 @@ QString CGRBLController::UpdateFeedRateMultiplier(QString cmd, double factor)
     QRegExp re("F[+-]?\\d*\\.?\\d+");
     bool ok;
 
-    qDebug() << ">" << cmd.trimmed();
+//    qDebug() << ">" << cmd.trimmed();
     if(re.indexIn(cmd) >= 0)
     {
         foreach(QString match, re.capturedTexts())
@@ -161,8 +161,8 @@ QString CGRBLController::UpdateFeedRateMultiplier(QString cmd, double factor)
             cmd.replace(match, QString::number(feedVal * factor, 'f', 3));
         }
     }
-    qDebug() << "<" << cmd.trimmed();
-    qDebug() << "-----------------------------------";
+ //   qDebug() << "<" << cmd.trimmed();
+ //   qDebug() << "-----------------------------------";
 
     return cmd;
 }
